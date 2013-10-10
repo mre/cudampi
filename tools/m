@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# MPI tool - Build and execute MPI.
+# Usage: m sourcefile.c numproc args
+
+sourcefile="$1"
+outname=$( echo "$sourcefile" | sed 's/\(.*\)\..*/\1/')
+
+if [ $# -gt 1 ]
+then
+  numprocessors=$2
+else
+  numprocessors=4
+fi
+
+# Remove first two arguments of parameter list. Remaining
+# arguments are input of actual program.
+shift 2
+
+mpicc "$sourcefile" -o "$outname" && mpirun -np $numprocessors "$outname" "$@"
